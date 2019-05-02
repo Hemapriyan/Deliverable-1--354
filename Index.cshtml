@@ -1,11 +1,67 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<Mvc.Models.mvcDisease_PreventionModel>
+
+@{
+    ViewBag.Title = "Index";
 }
 
+<br/>
+
+<p>
+    <a href="@Url.Action("AddOrEdit","Disease_Prevention")" class="btn btn-default"><i class="fa fa-plus"></i> Create New</a>
+</p>
+<table class="table table-striped">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Prevention_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prevention_Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disease_ID)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prevention_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prevention_Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disease_ID)
+            </td>
+            <td>
+                <a href="@Url.Action("AddOrEdit","Disease_Prevention",  new { id = item.Prevention_ID})" class="btn btn-default"><i class="fa fa-pencil"></i> Edit</a>
+                <a onclick="Delete(@item.Prevention_ID)" class="btn btn-default"><i class="fa fa-trash"></i> Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
 
 
-<div class="row">
+@section scripts{
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
 
-    <h1 style="text-align: center">Test</h1>
-    <p>paragraph here</p>
-</div>
+        });
+
+        function Delete(id) {
+            alertify.confirm('Web Api CRUD Operations', 'Are you sure you want to delete this record?', function () {
+                window.location.href = '@Url.Action("Delete","Disease_Prevention")/' + id;
+            }, null);
+        }
+
+    </script>
+
+}
